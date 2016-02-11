@@ -7,7 +7,7 @@ if [ ! -f ${HDP_OUTPUT} ]; then
   echo "Now download hdp from "${HDP_URL}
   curl ${HDP_URL} -o ${HDP_OUTPUT}
   echo "Untar ${HDP_OUTPUT} to ${APACHE_DOC_PATH}/hdp"
-  tar -zxf -C ${APACHE_DOC_PATH}/hdp ${HDP_OUTPUT}
+  tar -zxf ${HDP_OUTPUT} -C ${APACHE_DOC_PATH}/hdp
 fi
 
 
