@@ -4,10 +4,10 @@
 An Overlay network is needed. <br/>
 In every docker-machine(vm or real-machine), use following commands to build a swarm: <br/>
 <pre>
-\#start docker deamon with using consul key-value store 
+#start docker deamon with using consul key-value store 
 docker daemon -H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock --cluster-store=consul://<consul.host.ip>:8500 --cluster-advertise=<network-interface>:2375
 
-\#start consul (first)
+#start consul (first)
 docker run -d \
     -v /data \
     -p 8300:8300 \
@@ -22,7 +22,7 @@ docker run -d \
     --restart=always \
     progrium/consul -server -advertise <consul.host.ip> -bootstrap-expect 2
     
-\#start consul (others)
+#start consul (others)
   docker run -d \
     -v /data \
     -p 8300:8300 \
@@ -37,18 +37,18 @@ docker run -d \
     --restart=always \
     progrium/consul -server -advertise <this.machine.ip> -join <consul.host.ip>
     
-\#start swarm-agent
+#start swarm-agent
 docker run --name=agent -d \
   --restart=always \
   swarm join --advertise=<this.machine.ip>:2375 consul://<consul.host.ip>:8500
 
-\#--
-\#start a swarm-maanger on any machine in this swarm cluster
+#--
+#start a swarm-maanger on any machine in this swarm cluster
 docker run -d --name=manager_01 -p 2376:2375 \
   --restart=always \
   swarm manage consul://<consul.host.ip>:8500
 
-\#Create an overlay network
+#Create an overlay network
 docker network create --driver overlay net99
 
 </pre>
@@ -72,7 +72,7 @@ docker network create --driver overlay net99
 (need netwrok to download hdp)
 <pre>
 docker -H tcp://140.92.24.181:2376 run -d --restart=always --hostname=net99repohdp23centos6.net99 --name=net99repohdp23centos6 --net=net99 -p 80 whylu/docker-ambari:repo_hdp2.3.4_centos6
-\# see download stat
+# see download stat
 docker -H tcp://140.92.24.181:2376 logs -f net99repohdp23centos6
 
 </pre>
@@ -90,9 +90,9 @@ docker -H tcp://140.92.24.181:2376 run -d --restart=always -e SERVER_FQDN=net99a
 ## After net99repohdp23centos6 finish download hdp, go to ambari web to start
 At 'Select Stack' step, choose hdp2.3 and change repo url to local
 <pre>
-\#HDP
+#HDP
 http://net99repohdp22centos6.net99/hdp/HDP/centos6/2.x/updates/2.3.4.0/
-\#HDP-UTILS
+#HDP-UTILS
 http://net99repohdp22centos6.net99/hdp/HDP-UTILS-1.1.0.20/repos/centos6/
 </pre>
 
