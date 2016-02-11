@@ -1,5 +1,8 @@
 from centos:6.6
 
+#change timezone to Asia/Taipei
+RUN rm -f /etc/localtime && cp /usr/share/zoneinfo/Asia/Taipei /etc/localtime
+
 #install jdk1.7
 ADD ./install_jdk1.7.sh /tmp/install_jdk1.7.sh 
 RUN chmod +x /tmp/install_jdk1.7.sh
