@@ -3,7 +3,7 @@
 ## Prerequisites
 An Overlay network is needed. <br/>
 In every docker-machine(vm or real-machine), use following commands to build a swarm: <br/>
-<pre>
+```shell
 #start docker deamon with using consul key-value store 
 docker daemon -H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock --cluster-store=consul://${consul.host.ip}:8500 --cluster-advertise=${network-interface}:2375
 
@@ -51,59 +51,59 @@ docker run -d --name=manager_01 -p 2376:2375 \
 #Create an overlay network
 docker network create --driver overlay net99
 
-</pre>
+```
 <a href="https://docs.docker.com/engine/userguide/networking/get-started-overlay/">See more detail here<a/>
 
 
 ## Pull images
-<pre>
+```shell
 docker -H tcp://140.92.24.181:2376 pull whylu/docker-ambari:repo_hdp2.3.4_centos6
 docker -H tcp://140.92.24.181:2376 pull whylu/docker-ambari:server
 docker -H tcp://140.92.24.181:2376 pull whylu/docker-ambari:agent
-</pre>
+```
 
 ## Create an overlay network
-<pre>
+```shell
 docker network create --driver overlay net99
-</pre>
+```
 
 
 ## Create a local repository for hdp and hdp-utils 
 (need netwrok to download hdp)
-<pre>
+```shell
 docker -H tcp://140.92.24.181:2376 run -d --restart=always --hostname=net99repohdp23centos6.net99 --name=net99repohdp23centos6 --net=net99 -p 80 whylu/docker-ambari:repo_hdp2.3.4_centos6
 # see download stat
 docker -H tcp://140.92.24.181:2376 logs -f net99repohdp23centos6
 
-</pre>
+```
 
 ## Create a ambari server
-<pre>
+```shell
 docker -H tcp://140.92.24.181:2376 run -d --restart=always --hostname=net99ambari0.net99 --name=net99ambari0 --net=net99 -p 8080 whylu/docker-ambari:server
-</pre>
+```
 
 ## Create ambari agents as many as you like
-<pre>
+```shell
 docker -H tcp://140.92.24.181:2376 run -d --restart=always -e SERVER_FQDN=net99ambari0.net99 --hostname=net99ambari1.net99 --name=net99ambari1 --net=net99 whylu/docker-ambari:agent
-</pre>
+```
 
 ## After net99repohdp23centos6 finish download hdp, go to ambari web to start
 At 'Select Stack' step, choose hdp2.3 and change repo url to local
-<pre>
+```shell
 #HDP
 http://net99repohdp22centos6.net99/hdp/HDP/centos6/2.x/updates/2.3.4.0/
 #HDP-UTILS
 http://net99repohdp22centos6.net99/hdp/HDP-UTILS-1.1.0.20/repos/centos6/
-</pre>
+```
 
 At 'Target Hosts'
-<pre>
+```shell
 net99ambari1.net99
 net99ambari2.net99
 net99ambari3.net99
 net99ambari4.net99
 net99ambari5.net99
-</pre>
+```
 
 At 'Host Registration Infomation'
 select 'Preform manual regestration on hosts and do not use SSH' <br/>
